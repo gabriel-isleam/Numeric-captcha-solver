@@ -5,7 +5,7 @@
 
 int pixel[100][100];
 
-int cautarecifra(int l, int c)												// functie de cautare a cifrelor in matricea pixelilor
+int digit_search(int l, int c)												// function for searching digits in the pixel matrix
 {
 		if (pixel[l][c - 1] == 0)
 			if (pixel[l][c - 4] == 0)
@@ -35,16 +35,16 @@ int cautarecifra(int l, int c)												// functie de cautare a cifrelor in ma
 			}
 }
 
-void setarecifra(int l, int c, int nr)										// functie ce seteaza elementele unei cifre cu valoarea nr
-{																			// acest lucru usureaza salvarea culorilor pentru fiecare cifra
-	int i, j;																// util pentru task-ul 3
+void set_digit(int l, int c, int nr)										// function which sets elements of a digit with the value "nr"
+{																			// this thing make easy to save the color for each digit
+	int i, j;																// useful for third task
 	for (i = l; i <= l + 4; i++)
 		for (j = c; j >= c - 4; j--)
 			if (pixel[i][j] == 1)
 				pixel[i][j] = nr;
 }
 
-void desenare8(int a, int b, int c)											// functie ce formeaza cifra 8 in matricea pixelilor
+void draw_8(int a, int b, int c)											// function which draw the 8 digit in the pixel matrix
 {
 	int x = a + 4, y = b + 4, ok = 1;
 	for (; a <= x; a++)
@@ -62,8 +62,8 @@ void desenare8(int a, int b, int c)											// functie ce formeaza cifra 8 in 
 		}
 }
 
-void scrierecifra(int a, int b, int nr, int c)								// functie ce seteaza cifrele in matricea pixelilor, dupa
-{																			// eliminarea celor dorite
+void digit_writing(int a, int b, int nr, int c)								// function which sets the digits in the pixel matrix, after
+{																			// removing the deisred digits
 	int x = a, y = b;
 	if (nr == 1)
 	{
@@ -73,9 +73,9 @@ void scrierecifra(int a, int b, int nr, int c)								// functie ce seteaza cifr
 	}
 	else
 	{
-		desenare8(a, b, c);													// in afara cazului special cand cifra e 1, in restul cazurilor
-		if (nr == 0)														// se deseneaza cifra 8 (ce contine toti pixelii posibili pentru  
-		{																	// o cifra), apoi pentru fiecare cifra se elimina din pixelii in plus
+		draw_8(a, b, c);													// except for the case of digit 1, in the other cases
+		if (nr == 0)														// digit 8 is drawn (which contains all possible pixels for
+		{																	// a digit), then for each digit will be removed the extra pixels 
 			pixel[a + 2][b + 1] = 0;
 			pixel[a + 2][b + 2] = 0;
 			pixel[a + 2][b + 3] = 0;
@@ -233,11 +233,11 @@ int main()
 		for (a = 1; a <= infoi.height; a++)
 			if (pixel[a][b] == 1)
 			{ 
-				nr[n] = cautarecifra(a, b);									// formarea vectorului de cifre in ordine inversa aparitiei lor
+				nr[n] = digit_search(a, b);									// formarea vectorului de cifre in ordine inversa aparitiei lor
 				poz[n].lin = a;												// salvarea pozitiei pentru fiecare cifra
 				poz[n].col = b - 4;
 				n++;
-				setarecifra(a, b, 2);										// setarea valorii 2 pentru cifrele deja gasite pentru a nu
+				set_digit(a, b, 2);										// setarea valorii 2 pentru cifrele deja gasite pentru a nu
 			}																// incurca restul cautarii
 
 	if ((fp3 = fopen(output_filename_task2, "wt")) == NULL)
@@ -297,14 +297,14 @@ int main()
 				break;
 			else if (poz[i].lin == a && poz[i].col == b)
 			{
-				if (cautarecifra(a, b + 4) == nr[i])
+				if (digit_search(a, b + 4) == nr[i])
 				{
-					setarecifra(a, b + 4, c);
+					set_digit(a, b + 4, c);
 					c++;
 				}
 				else
 				{
-					scrierecifra(a, b, nr[i], c);
+					digit_writing(a, b, nr[i], c);
 					c++;
 				}
 				i++;
